@@ -11,11 +11,55 @@ int compare_sort_fn(const void *a, const void *b) {
   return val_a - val_b;
 }
 
+void part_one(int *left_column, int *right_column, int line_count) {
+  int sum = 0;
+
+  for (int i = 0; i < line_count; i++) {
+    sum += abs(left_column[i] - right_column[i]);
+  }
+
+  printf("Total difference: %d\n", sum);
+}
+
+void part_two(int *left_column, int *right_column, int line_count) {
+  int i = 0;
+  int j = 0;
+  int sum = 0;
+
+  int counts[line_count];
+
+  // initialize counts
+  for (int x = 0; x < line_count; x++) {
+    counts[x] = 0;
+  }
+
+  // now count how many times elements in the left column show up in the right column
+  while (i < line_count && j < line_count) {
+    if (left_column[i] == right_column[j]) {
+      counts[i] += 1;
+      j++;
+    } else if (left_column[i] < right_column[j]) {
+      i += 1;
+      j = 0;
+    } else {
+      j += 1;
+    }
+  }
+
+  // now multiply each and get the sum
+  for (int y = 0; y < line_count; y++) {
+    int multiplier = counts[y];
+    int number = left_column[y];
+    sum += (number * multiplier);
+  }
+
+  printf("Total multiplier sum: %d\n", sum);
+}
+
 int main(void) {
   int left_column[MAX_LINES];
   int right_column[MAX_LINES];
   int line_count = 0;
-  int sum = 0;
 
   FILE *input = fopen("input.txt", "r");
   if (!input) {
@@ -39,11 +83,8 @@ int main(void) {
   qsort(left_column, line_count, sizeof(int), compare_sort_fn);
   qsort(right_column, line_count, sizeof(int), compare_sort_fn);
 
-  for (int i = 0; i < line_count; i++) {
-    sum += abs(left_column[i] - right_column[i]);
-  }
-
-  printf("Total difference: %d\n", sum);
+  part_one(left_column, right_column, line_count);
+  part_two(left_column, right_column, line_count);
 
   return 0;
 }
