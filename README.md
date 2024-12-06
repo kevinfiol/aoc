@@ -1,6 +1,6 @@
 # aoc
 
-## 2023
+## 2022
 ```shell
 $ go version
 go version go1.18.3 windows/amd64
